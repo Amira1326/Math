@@ -61,14 +61,13 @@ body{
    and it doubles as the soft backdrop that fills the edges of the crisp,
    uncropped intro video on the splash screen. */
 .persistent-bg{
-  position:fixed; inset:-20px; z-index:-4;
+  position:fixed; inset:0; z-index:-4;
   background-size:cover; background-position:center bottom;
-  filter:blur(22px) brightness(0.55) saturate(1.05);
-  transform:scale(1.12);
+  filter:brightness(0.75) saturate(1.05);
 }
 .persistent-bg-overlay{
   position:fixed; inset:0; z-index:-3;
-  background:linear-gradient(180deg, rgba(23,27,52,.45) 0%, rgba(23,27,52,.35) 45%, rgba(23,27,52,.85) 100%);
+  background:linear-gradient(180deg, rgba(23,27,52,.25) 0%, rgba(23,27,52,.15) 45%, rgba(23,27,52,.55) 100%);
 }
 /* subtle premium vignette frame around the whole viewport */
 body:after{
@@ -379,7 +378,7 @@ body:after{
 .mute-btn:active{ transform:translateY(3px); box-shadow:0 4px 0 rgba(0,0,0,.15); }
 
 /* ---------- TITLE / SPLASH SCREEN ---------- */
-#screen-title{ justify-content:center; position:relative; }
+#screen-title{ justify-content:center; position:relative; padding-top:12vh; }
 .splash-panel{
   display:flex; flex-direction:column; align-items:center; gap:20px;
   background:rgba(23,27,52,.55); backdrop-filter:blur(4px);
