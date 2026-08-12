@@ -335,14 +335,11 @@ body{
 .mute-btn:active{ transform:translateY(3px); box-shadow:0 4px 0 rgba(0,0,0,.15); }
 
 /* ---------- TITLE / SPLASH SCREEN ---------- */
-#screen-title{ justify-content:flex-end; padding-bottom:6%; gap:18px; position:relative; }
-.splash-center-title{
-  position:absolute; top:44%; left:50%; transform:translate(-50%,-50%);
-  text-align:center; pointer-events:none;
-}
-.splash-center-title .big{
-  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:56px; line-height:1;
-  color:#fff; text-shadow:0 4px 0 rgba(0,0,0,.35), 0 0 26px rgba(0,0,0,.5); letter-spacing:1px;
+#screen-title{ justify-content:center; gap:16px; position:relative; }
+.splash-big-title{
+  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:42px; line-height:1;
+  color:#fff; text-shadow:0 4px 0 rgba(0,0,0,.35), 0 0 26px rgba(0,0,0,.55); letter-spacing:1px;
+  text-align:center;
 }
 .splash-tagline{
   font-family:'Baloo 2',sans-serif; font-weight:700; font-size:22px;
@@ -386,7 +383,7 @@ body{
 
     <!-- TITLE / SPLASH -->
     <div class="screen active" id="screen-title">
-      <div class="splash-center-title"><div class="big">MATH DETECTIVES</div></div>
+      <div class="splash-big-title">MATH DETECTIVES</div>
       <div class="splash-tagline">Can you solve the Missing Number mystery? 🔎</div>
       <button class="start-btn" id="startBtn">START 🔎</button>
     </div>
