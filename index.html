@@ -62,7 +62,7 @@ body{
    uncropped intro video on the splash screen. */
 .persistent-bg{
   position:fixed; inset:-20px; z-index:-4;
-  background-size:cover; background-position:center;
+  background-size:cover; background-position:center bottom;
   filter:blur(22px) brightness(0.55) saturate(1.05);
   transform:scale(1.12);
 }
@@ -359,7 +359,7 @@ body:after{
 
 /* ---------- BACKGROUND VIDEO ---------- */
 .bg-video{
-  position:fixed; inset:0; width:100%; height:100%; object-fit:cover; object-position:center;
+  position:fixed; inset:0; width:100%; height:100%; object-fit:cover; object-position:center bottom;
   z-index:-2; display:none; /* shown automatically once a real video source is set */
 }
 .bg-video.show{ display:block; }
