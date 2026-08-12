@@ -212,48 +212,25 @@ body{
 }
 @keyframes stickerpop{ from{ transform:scale(0) rotate(-20deg); opacity:0;} to{ transform:scale(1) rotate(0); opacity:1;} }
 
-/* Camera / scanner */
-.scanner-title{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:16px; color:#B9C0EE; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px;}
-.glass-frame{
-  position:relative; width:100%; max-width:330px; aspect-ratio:1/1;
-  border-radius:50%;
-  border:14px solid var(--clue);
-  box-shadow:0 0 0 6px #171B34, 0 10px 0 rgba(0,0,0,.25), 0 0 30px rgba(255,201,60,.35);
-  overflow:hidden;
-  background:#000;
+/* Answer panel — big touch-friendly number pad (this IS the interaction,
+   built for a student tapping directly on a smart board, no camera needed) */
+.answer-title{
+  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:20px; color:var(--chalk);
+  letter-spacing:0.5px; margin-bottom:16px; text-align:center;
 }
-.glass-frame:after{ /* handle */
-  content:''; position:absolute; width:26px; height:90px; background:var(--clue);
-  border-radius:12px; right:-30px; bottom:-58px; transform:rotate(45deg);
-  box-shadow:0 6px 0 rgba(0,0,0,.2);
-}
-video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
-@supports not (aspect-ratio: 1 / 1){
-  .glass-frame{ height:330px; }
-}
-.guide-box{
-  position:absolute; inset:22%; border:4px dashed rgba(255,255,255,.85); border-radius:16px;
-  pointer-events:none;
-}
-.scan-sweep{
-  position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(180deg, transparent 0%, rgba(255,201,60,.35) 48%, transparent 100%);
-  transform:translateY(-100%);
-}
-.scanning .scan-sweep{ animation:sweep 1.4s linear infinite; }
-@keyframes sweep{ from{transform:translateY(-100%);} to{transform:translateY(100%);} }
-.cam-hint{ margin-top:14px; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:15px; color:var(--clue); text-align:center; min-height:20px;}
-.fallback-note{ font-size:12px; color:#8790C4; text-align:center; margin-top:6px; max-width:300px;}
+.answer-hint{ font-family:'Baloo 2',sans-serif; font-weight:700; font-size:15px; color:var(--clue); text-align:center; min-height:20px; margin-top:14px;}
 
-/* Number pad fallback */
-.numpad{ display:none; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:14px; width:100%; max-width:330px; }
-.numpad.show{ display:grid; }
+.numpad{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; width:100%; max-width:420px; }
 .numpad button{
-  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:22px;
-  background:var(--sky); color:#fff; border:none; border-bottom:4px solid var(--sky-dark);
-  border-radius:12px; padding:12px 0; cursor:pointer;
+  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:32px;
+  background:linear-gradient(180deg,#5CB4EA,var(--sky)); color:#fff;
+  border:none; border-bottom:6px solid var(--sky-dark);
+  border-radius:16px; padding:20px 0; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,.2);
+  transition: transform .08s ease;
 }
-.numpad button:active{ transform:translateY(3px); border-bottom-width:1px; }
+.numpad button:active{ transform:translateY(4px) scale(.97); border-bottom-width:2px; }
+.numpad button.correct-flash{ background:linear-gradient(180deg,#6EE0A3,var(--mint-dark)); border-bottom-color:var(--mint-dark); }
+.numpad button.wrong-flash{ background:linear-gradient(180deg,#FF9494,var(--coral)); border-bottom-color:#C94848; }
 
 /* Countdown overlay */
 .overlay{
@@ -335,35 +312,16 @@ video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
 }
 .icon-btn:active{ transform:translateY(2px); }
 #backBtn{ left:14px; }
-#switchModeBtn{
-  margin-top:10px; background:transparent; border:2px dashed #4C558F; color:#B9C0EE;
-  font-family:'Nunito',sans-serif; font-weight:700; font-size:12px;
-  border-radius:12px; padding:7px 14px; cursor:pointer;
-}
-#switchModeBtn:active{ transform:translateY(2px); }
-
-/* Camera loading / error states */
-.cam-status{
-  position:absolute; inset:0; display:none; align-items:center; justify-content:center;
-  flex-direction:column; text-align:center; padding:14px; background:rgba(0,0,0,.55);
-  color:#fff; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; z-index:2;
-}
-.cam-status.show{ display:flex; }
-.spinner{
-  width:34px; height:34px; border-radius:50%; border:5px solid rgba(255,255,255,.25);
-  border-top-color:var(--clue); animation:spin 0.9s linear infinite; margin-bottom:10px;
-}
-@keyframes spin{ to{ transform:rotate(360deg); } }
 
 /* ---------- BACKGROUND VIDEO ---------- */
 .bg-video{
-  position:fixed; inset:0; width:100%; height:100%; object-fit:cover;
+  position:fixed; inset:0; width:100%; height:100%; object-fit:contain;
   z-index:-2; display:none; /* shown automatically once a real video source is set */
 }
 .bg-video.show{ display:block; }
 .bg-video-overlay{
   position:fixed; inset:0; z-index:-1;
-  background:linear-gradient(180deg, rgba(23,27,52,.55), rgba(23,27,52,.78));
+  background:linear-gradient(180deg, rgba(23,27,52,.25) 0%, rgba(23,27,52,.15) 55%, rgba(23,27,52,.75) 100%);
   display:none;
 }
 .bg-video-overlay.show{ display:block; }
@@ -377,7 +335,15 @@ video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
 .mute-btn:active{ transform:translateY(3px); box-shadow:0 4px 0 rgba(0,0,0,.15); }
 
 /* ---------- TITLE / SPLASH SCREEN ---------- */
-#screen-title{ justify-content:flex-end; padding-bottom:6%; gap:18px; }
+#screen-title{ justify-content:flex-end; padding-bottom:6%; gap:18px; position:relative; }
+.splash-center-title{
+  position:absolute; top:44%; left:50%; transform:translate(-50%,-50%);
+  text-align:center; pointer-events:none;
+}
+.splash-center-title .big{
+  font-family:'Baloo 2',sans-serif; font-weight:800; font-size:56px; line-height:1;
+  color:#fff; text-shadow:0 4px 0 rgba(0,0,0,.35), 0 0 26px rgba(0,0,0,.5); letter-spacing:1px;
+}
 .splash-tagline{
   font-family:'Baloo 2',sans-serif; font-weight:700; font-size:22px;
   color:#fff; text-align:center; background:rgba(23,27,52,.55);
@@ -396,7 +362,7 @@ video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
 </head>
 <body>
 <div class="stars-bg"></div>
-<video class="bg-video" id="bgVideo" autoplay muted loop playsinline></video>
+<video class="bg-video" id="bgVideo" playsinline></video>
 <div class="bg-video-overlay" id="bgVideoOverlay"></div>
 <div id="app">
 
@@ -420,6 +386,7 @@ video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
 
     <!-- TITLE / SPLASH -->
     <div class="screen active" id="screen-title">
+      <div class="splash-center-title"><div class="big">MATH DETECTIVES</div></div>
       <div class="splash-tagline">Can you solve the Missing Number mystery? 🔎</div>
       <button class="start-btn" id="startBtn">START 🔎</button>
     </div>
@@ -496,17 +463,9 @@ video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
       </div>
 
       <div class="right-panel">
-        <div class="scanner-title">📷 Show your number card</div>
-        <div class="glass-frame" id="glassFrame">
-          <video id="cam" autoplay playsinline muted></video>
-          <div class="guide-box"></div>
-          <div class="scan-sweep"></div>
-          <div class="cam-status" id="camStatus"><div class="spinner"></div><span id="camStatusText">Waking up the camera…</span></div>
-        </div>
-        <div class="cam-hint" id="camHint">Ready? Wait for GO!</div>
-        <div class="fallback-note" id="fallbackNote" style="display:none;">Camera scanning unavailable right now — tap your answer instead.</div>
+        <div class="answer-title">🖐️ TAP THE RIGHT NUMBER</div>
         <div class="numpad" id="numpad"></div>
-        <button id="switchModeBtn" type="button">✋ Trouble with the camera? Tap numbers instead</button>
+        <div class="answer-hint" id="camHint">Ready? Wait for GO!</div>
       </div>
 
       <!-- countdown overlay -->
@@ -536,7 +495,6 @@ video#cam{ width:100%; height:100%; object-fit:cover; transform:scaleX(-1); }
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
 <script>
 /* ============================================================
    MATH DETECTIVES — game logic
@@ -562,12 +520,8 @@ let state = {
   qIndex: 0,
   currentAnswer: null,
   scanning: false,
-  camReady: false,
-  usingFallback: false,
-  scanTimer: null,
-  stream: null,          // reused across rounds so we don't re-prompt for permission
-  camAttempted: false,
   musicOn: true,
+  introPlayed: false,
 };
 
 const el = (id) => document.getElementById(id);
@@ -576,12 +530,37 @@ function applyAssets(){
   if(ASSETS.backgroundVideo){
     const v = el('bgVideo');
     v.src = ASSETS.backgroundVideo;
+    v.loop = false;      // play once, then stay on the last frame
+    v.muted = false;      // this video has sound
     v.classList.add('show');
     el('bgVideoOverlay').classList.add('show');
-    v.play().catch(()=>{ /* will start on first user gesture (START button) */ });
+    attemptIntroPlay();
   }
 }
 applyAssets();
+
+function attemptIntroPlay(){
+  if(state.introPlayed || !ASSETS.backgroundVideo) return;
+  const v = el('bgVideo');
+  const p = v.play();
+  if(p && p.then){
+    p.then(() => { state.introPlayed = true; })
+     .catch(() => {
+        // Autoplay-with-sound was blocked — start it on the first real tap/click/key
+        // anywhere on the page instead (still plays once, with sound, from the top).
+        // Skip taps on the START button itself so we don't play-then-instantly-hide
+        // the video the moment someone jumps straight past the splash screen.
+        const events = ['pointerdown','click','keydown'];
+        const retry = (e) => {
+          if(state.introPlayed){ cleanup(); return; }
+          if(e && e.target && e.target.closest && e.target.closest('#startBtn')) return;
+          v.play().then(() => { state.introPlayed = true; cleanup(); }).catch(()=>{});
+        };
+        const cleanup = () => events.forEach(evt => document.removeEventListener(evt, retry));
+        events.forEach(evt => document.addEventListener(evt, retry, { passive:true }));
+     });
+  }
+}
 
 /* ---------------- screen switching ---------------- */
 function showScreen(id){
@@ -598,8 +577,7 @@ function showScreen(id){
     if(onTitle){
       v.classList.add('show');
       el('bgVideoOverlay').classList.add('show');
-      v.currentTime = 0;
-      v.play().catch(()=>{});
+      attemptIntroPlay(); // no-op if it already played — we never restart it
     } else {
       v.classList.remove('show');
       el('bgVideoOverlay').classList.remove('show');
@@ -728,8 +706,21 @@ function startLevel(level){
   updateScoreUI();
   updateStickerTray();
   showScreen('screen-game');
-  setupCamera();
+  buildNumpad();
   loadQuestion();
+}
+
+function buildNumpad(){
+  const pad = el('numpad');
+  pad.innerHTML = '';
+  for(let i=1;i<=10;i++){
+    const b = document.createElement('button');
+    b.textContent = i;
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Answer ' + i);
+    b.onclick = () => handleAnswer(i, b);
+    pad.appendChild(b);
+  }
 }
 
 function renderQuestionVisual(q){
@@ -773,6 +764,7 @@ function loadQuestion(){
   state.currentAnswer = q.answer;
 
   renderQuestionVisual(q);
+  setNumpadEnabled(false);
 
   setMascot('idle');
   say(state.qIndex === 0 ? "Let's find the missing number!" : "Next clue, detective!");
@@ -801,40 +793,36 @@ function runCountdown(){
       numEl.textContent = 'GO! 🚨';
       setTimeout(() => {
         overlay.classList.remove('show');
-        beginScanning();
+        beginAnswering();
       }, 650);
     }
   };
   setTimeout(tick, 700);
 }
 
-function beginScanning(){
+function beginAnswering(){
   setMascot('idle');
-  el('camHint').textContent = 'Show me your number card! 🔍';
-  el('glassFrame').classList.add('scanning');
-  state.scanning = true;
-  noReadStreak = 0;
-  if(state.usingFallback){
-    // fallback numpad already visible; nothing else to do
-    return;
-  }
-  clearInterval(state.scanTimer);
-  state.scanTimer = setInterval(scanFrame, SCAN_INTERVAL_MS);
-  scanFrame();
+  el('camHint').textContent = 'Tap the number you found! 🔎';
+  state.scanning = true; // true while we're accepting taps for the current question
+  setNumpadEnabled(true);
 }
 
-function stopScanning(){
-  state.scanning = false;
-  clearInterval(state.scanTimer);
-  el('glassFrame').classList.remove('scanning');
+function setNumpadEnabled(enabled){
+  el('numpad').querySelectorAll('button').forEach(b => { b.disabled = !enabled; });
 }
 
-function handleAnswer(value){
+function handleAnswer(value, buttonEl){
   if(!state.scanning) return;
   if(value === state.currentAnswer){
-    stopScanning();
+    state.scanning = false;
+    setNumpadEnabled(false);
+    if(buttonEl) buttonEl.classList.add('correct-flash');
     correctFeedback();
   } else {
+    if(buttonEl){
+      buttonEl.classList.add('wrong-flash');
+      setTimeout(() => buttonEl.classList.remove('wrong-flash'), 500);
+    }
     wrongFeedback();
   }
 }
@@ -889,7 +877,8 @@ function correctFeedback(){
 }
 
 function wrongFeedback(){
-  state.scanning = false; // pause scanning while we comfort the child
+  state.scanning = false; // pause taps while we comfort the child
+  setNumpadEnabled(false);
   state.combo = 0;
   setMascot('sad');
   playChime('wrong');
@@ -899,8 +888,9 @@ function wrongFeedback(){
   setTimeout(() => {
     hideFeedback();
     setMascot('idle');
-    el('camHint').textContent = 'Show me your number card! 🔍';
-    state.scanning = true; // resume scanning loop (interval keeps running underneath)
+    el('camHint').textContent = 'Tap the number you found! 🔎';
+    state.scanning = true;
+    setNumpadEnabled(true);
   }, 1300);
 }
 
@@ -947,7 +937,8 @@ function updateScoreUI(){
 }
 
 function endRound(){
-  stopScanning();
+  state.scanning = false;
+  setNumpadEnabled(false);
   el('finalStars').textContent = '⭐'.repeat(state.score) + '☆'.repeat(ROUND_LENGTH - state.score);
   showScreen('screen-end');
   setMascot('idle');
@@ -1096,175 +1087,10 @@ const music = {
   }
 };
 
-/* ---------------- camera + OCR scanning ---------------- */
-async function setupCamera(){
-  // Reuse an already-granted stream across rounds instead of re-requesting permission.
-  if(state.stream && state.stream.active){
-    el('cam').srcObject = state.stream;
-    state.camReady = true;
-    state.usingFallback = false;
-    el('fallbackNote').style.display = 'none';
-    el('numpad').classList.remove('show');
-    el('glassFrame').style.opacity = '1';
-    hideCamStatus();
-    return;
-  }
-
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    console.warn('getUserMedia not supported on this browser/context');
-    enableFallback('This browser can\'t access the camera here — tap your answer instead.');
-    return;
-  }
-
-  showCamStatus('Waking up the camera…');
-  const video = el('cam');
-
-  const tryGetStream = async (constraints) => navigator.mediaDevices.getUserMedia(constraints);
-
-  try{
-    let stream;
-    try{
-      // prefer the rear/environment camera (typical for a wall-mounted kiosk)
-      stream = await tryGetStream({ video: { facingMode: { ideal: 'environment' } } });
-    }catch(innerErr){
-      // some kiosks/tablets only expose a single (front) camera — retry generically
-      stream = await tryGetStream({ video: true });
-    }
-    video.srcObject = stream;
-    state.stream = stream;
-    await video.play().catch(()=>{ /* some browsers need a user gesture; video still renders once autoplay kicks in */ });
-
-    // wait briefly for real video dimensions before declaring camera ready
-    const ready = await waitForVideoDimensions(video, 6000);
-    if(!ready){
-      throw new Error('camera-timeout');
-    }
-
-    state.camReady = true;
-    state.usingFallback = false;
-    el('fallbackNote').style.display = 'none';
-    el('numpad').classList.remove('show');
-    el('glassFrame').style.opacity = '1';
-    hideCamStatus();
-  }catch(err){
-    console.warn('Camera unavailable, switching to fallback tap mode', err);
-    let msg = 'Camera scanning unavailable right now — tap your answer instead.';
-    if(err && err.name === 'NotAllowedError') msg = 'Camera permission was blocked — tap your answer instead.';
-    else if(err && err.name === 'NotFoundError') msg = 'No camera was found on this device — tap your answer instead.';
-    else if(err && err.name === 'NotReadableError') msg = 'Another app is using the camera — tap your answer instead.';
-    enableFallback(msg);
-  }
-}
-
-function waitForVideoDimensions(video, timeoutMs){
-  return new Promise(resolve => {
-    if(video.videoWidth > 0){ resolve(true); return; }
-    let done = false;
-    const onReady = () => { if(!done && video.videoWidth > 0){ done = true; cleanup(); resolve(true); } };
-    const cleanup = () => video.removeEventListener('loadedmetadata', onReady);
-    video.addEventListener('loadedmetadata', onReady);
-    setTimeout(() => { if(!done){ done = true; cleanup(); resolve(video.videoWidth > 0); } }, timeoutMs);
-  });
-}
-
-function showCamStatus(text){
-  el('camStatusText').textContent = text;
-  el('camStatus').classList.add('show');
-}
-function hideCamStatus(){
-  el('camStatus').classList.remove('show');
-}
-
-function enableFallback(message){
-  state.usingFallback = true;
-  state.camReady = false;
-  hideCamStatus();
-  el('fallbackNote').textContent = message || 'Camera scanning unavailable right now — tap your answer instead.';
-  el('fallbackNote').style.display = 'block';
-  el('glassFrame').style.opacity = '0.25';
-  const pad = el('numpad');
-  pad.innerHTML = '';
-  for(let i=1;i<=10;i++){
-    const b = document.createElement('button');
-    b.textContent = i;
-    b.type = 'button';
-    b.setAttribute('aria-label', 'Answer ' + i);
-    b.onclick = () => handleAnswer(i);
-    pad.appendChild(b);
-  }
-  pad.classList.add('show');
-  // scanning loop is meaningless in fallback mode
-  clearInterval(state.scanTimer);
-}
-
-let ocrBusy = false;
-let noReadStreak = 0;
-async function scanFrame(){
-  if(!state.scanning || state.usingFallback || ocrBusy) return;
-  if(typeof Tesseract === 'undefined'){ enableFallback('The number-reader couldn\'t load — tap your answer instead.'); return; }
-  const video = el('cam');
-  if(!video || !video.videoWidth){
-    noReadStreak++;
-    if(noReadStreak > 6){ enableFallback('Camera feed looks empty — tap your answer instead.'); }
-    return;
-  }
-  ocrBusy = true;
-  el('camHint').textContent = '🔍 Scanning...';
-  try{
-    const canvas = document.createElement('canvas');
-    const size = 320;
-    canvas.width = size; canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    // crop the centered square guide-box area from the (mirrored) video
-    const vw = video.videoWidth, vh = video.videoHeight;
-    const cropSize = Math.min(vw, vh) * 0.56;
-    const sx = (vw - cropSize)/2, sy = (vh - cropSize)/2;
-    ctx.translate(size,0); ctx.scale(-1,1); // undo mirror for correct reading orientation
-    ctx.drawImage(video, sx, sy, cropSize, cropSize, 0, 0, size, size);
-    ctx.setTransform(1,0,0,1,0,0);
-
-    // contrast boost
-    const imgData = ctx.getImageData(0,0,size,size);
-    const d = imgData.data;
-    for(let i=0;i<d.length;i+=4){
-      const gray = 0.34*d[i] + 0.5*d[i+1] + 0.16*d[i+2];
-      const v = gray > 140 ? 255 : (gray < 90 ? 0 : gray);
-      d[i]=d[i+1]=d[i+2]=v;
-    }
-    ctx.putImageData(imgData,0,0);
-
-    const dataUrl = canvas.toDataURL('image/png');
-    const result = await Tesseract.recognize(dataUrl, 'eng', {
-      tessedit_char_whitelist: '0123456789',
-    });
-    const text = (result.data.text || '').trim();
-    const match = text.match(/\d{1,2}/);
-    if(match){
-      noReadStreak = 0;
-      let num = parseInt(match[0], 10);
-      if(num >= 1 && num <= 10){
-        el('camHint').textContent = `I see ${num}!`;
-        handleAnswer(num);
-      } else {
-        el('camHint').textContent = 'Show me your number card! 🔍';
-      }
-    } else {
-      noReadStreak++;
-      el('camHint').textContent = noReadStreak > 8
-        ? 'Hold the card steady in good light 💡'
-        : 'Show me your number card! 🔍';
-    }
-  }catch(e){
-    console.warn('OCR error', e);
-  }
-  ocrBusy = false;
-}
 
 /* ---------------- wiring ---------------- */
 el('startBtn').addEventListener('click', () => {
   getAudioCtx(); // unlock audio on this user gesture
-  const v = el('bgVideo');
-  if(v.src) v.play().catch(()=>{});
   if(state.musicOn) music.start();
   showScreen('screen-start');
 });
@@ -1292,27 +1118,12 @@ el('playAgainBtn').addEventListener('click', () => {
   showScreen('screen-start');
 });
 el('backBtn').addEventListener('click', () => {
-  stopScanning();
+  state.scanning = false;
+  setNumpadEnabled(false);
   showScreen('screen-start');
 });
-el('switchModeBtn').addEventListener('click', () => {
-  stopScanning();
-  enableFallback('Switched to tap mode — pick your answer below.');
-  state.scanning = true; // numpad taps still need scanning=true to register via handleAnswer
-});
-
-// If a tab/kiosk is left running for a long time and the browser suspends the camera
-// (e.g. screen lock), try to recover gracefully instead of freezing on a black frame.
-document.addEventListener('visibilitychange', () => {
-  if(document.visibilityState === 'visible' && state.stream){
-    const track = state.stream.getVideoTracks()[0];
-    if(track && track.readyState === 'ended'){
-      state.stream = null;
-      if(el('screen-game').classList.contains('active')) setupCamera();
-    }
-  }
-});
 </script>
+
 
 </body>
 </html>
